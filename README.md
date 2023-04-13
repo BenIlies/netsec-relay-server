@@ -13,17 +13,17 @@ A simple network security relay server that performs calculations and sanitizes 
 
 To install the NetSec Relay Server, simply clone the repository and install any necessary dependencies.
 
-\```bash
+```bash
 git clone https://github.com/BenIlies/netsec-relay-server.git
-\```
+```
 
 ## Usage
 
 To start the relay server, run the following command:
 
-\```bash
+```bash
 python main.py [--config CONFIG_FILE] [--log LOG_FILE] [--verbose] [--log-level {info, warning, error}]
-\```
+```
 
 - `--config CONFIG_FILE`: Path to the configuration file (default: `config.ini`).
 - `--log LOG_FILE`: Path to the log file (default: `log.txt`).
@@ -34,7 +34,7 @@ python main.py [--config CONFIG_FILE] [--log LOG_FILE] [--verbose] [--log-level 
 
 Configure the relay server by modifying the `config.ini` file. The available options are:
 
-\```ini
+```ini
 [RelayServer]
 ip_address = 127.0.0.1
 port = 44444
@@ -42,7 +42,7 @@ max_clients = 10
 client_timeout = 10
 response_timeout = 10
 requests_per_minute = 60
-\```
+```
 
 - `ip_address`: IP address for the relay server to bind to.
 - `port`: Port number for the relay server to listen on.
