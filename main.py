@@ -1,6 +1,6 @@
 import argparse
 from netsec import setup_logging
-from p1 import read_config
+from netsec import read_config
 from netsec.relay_server import RelayServer
 
 # Define the main function
