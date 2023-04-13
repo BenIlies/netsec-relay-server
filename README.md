@@ -4,10 +4,24 @@ A simple network security relay server that performs calculations and sanitizes 
 
 ## Table of Contents
 
+- [TODO](#todo)
+- [Assumptions](#assumptions)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Structure](#structure)
+- [Testing](#testing)
+
+## TODO
+
+- [ ] Finish the test for overflow and the `relay_server`
+- [ ] Add support for "0.0.0.0" binding
+- [ ] Modify the constraints on the two values computed
+
+## Assumptions
+
+- IP addresses are considered correct only if they are in the format `x.x.x.x`, where `x` represents an integer between 0 and 255.
+- Input values for the relay server are integers and not floating-point numbers.
 
 ## Installation
 
@@ -62,3 +76,11 @@ The following files make up the project:
   - `client.py`: Defines the `Client` class for managing client connections and request limits.
   - `relayserver.py`: Defines the `RelayServer` class for managing client connections and handling requests.
   - `sanitizer.py`: Contains the `Sanitizer` class for validating and sanitizing user inputs.
+
+## Testing
+
+NetSec Relay Server has been designed with testing in mind, and provides a suite of automated tests that can be run to ensure that the server is functioning correctly. To run the tests, use the following command:
+
+```bash
+python -m unittest discover -s tests
+```
