@@ -98,6 +98,12 @@ class RelayServer:
             timer = Timer(self.client_timeout, lambda: close_connection(timeout=True))
             timer.start()
             return timer
+        
+        # This method handles end server timeout for a client connection.
+        def handle_end_server_timeout():
+                response = "End server timeout\r\n"
+                client.conn.sendall(response.encode())
+                logging.warning(f"End server timeout for client {addr}")
 
         addr = client.addr
         logging.info(f"Connection accepted from {addr}")
@@ -109,8 +115,6 @@ class RelayServer:
                 if client.check_request_limit(self.requests_per_minute):
                     client.conn.sendall("Request limit reached, try again later.\r\n".encode())
                     logging.warning(f"Request limit reached for client {addr}")
-                    break
-                if not data:
                     break
 
                 client_timer.cancel()
@@ -129,10 +133,9 @@ class RelayServer:
                 o1 = i1 / i2
                 o2 = i1 ** i2
 
-                response_timer = Timer(self.response_timeout, lambda: close_connection())
+                response_timer = Timer(self.response_timeout, handle_end_server_timeout)
                 response_timer.start()
                 self.send_data_to_end_server(o1, o2, i3, i4)
-                response_timer.cancel()
                 response = "Success\r\n"
                 logging.info(f"Successfully processed request for client {addr}")
             except ValueError as e:
@@ -145,6 +148,7 @@ class RelayServer:
                 response = f"Error while processing request: {e}\r\n"
                 logging.error(f"Error while processing request from {addr}: {e}")
             finally:
+                response_timer.cancel()
                 client.conn.sendall(response.encode())
 
         client_timer.cancel()
