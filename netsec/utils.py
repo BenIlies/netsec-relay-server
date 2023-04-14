@@ -9,10 +9,15 @@ def timeout(seconds=1):
         def wrapper(*args, **kwargs):
             # Define the target function for the thread
             def target():
-                # Execute the original function and save the result
-                result_dict['result'] = func(*args, **kwargs)
-                # Mark the function as completed
-                result_dict['completed'] = True
+                try:
+                    # Execute the original function and save the result
+                    result_dict['result'] = func(*args, **kwargs)
+                    # Mark the function as completed
+                    result_dict['completed'] = True
+                except Exception as e:
+                    # Save the exception and mark the function as completed
+                    result_dict['result'] = e
+                    result_dict['completed'] = True
                 # Signal the event to notify completion
                 event.set()
 
@@ -42,6 +47,14 @@ def timeout(seconds=1):
                 # Clear the event and raise a TimeoutError
                 event.clear()
                 raise TimeoutError(f"Function {func.__name__} timed out")
+
+            # Check if an exception was raised by the target function
+            if isinstance(result_dict['result'], Exception):
+                # Cancel the timer and clear the event
+                timer.cancel()
+                event.clear()
+                # Re-raise the exception
+                raise result_dict['result']
 
             # Return the function result
             return result_dict['result']
