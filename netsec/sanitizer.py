@@ -1,4 +1,6 @@
+import math
 from ipaddress import AddressValueError, IPv4Address
+from netsec.utils import timeout
 
 class Sanitizer:
     @staticmethod
@@ -24,8 +26,6 @@ class Sanitizer:
         except AddressValueError as e:
             raise ValueError(f"Invalid IP address: {ip}")
 
-
-
     @staticmethod
     def validate_port(port):
         """
@@ -44,28 +44,41 @@ class Sanitizer:
             raise ValueError(f"Invalid port number: {port}")
 
     @staticmethod
+    @timeout()
     def validate_input(i1, i2):
         """
-        Validate the input values i1 and i2.
+        Validate and sanitize the input values i1 and i2, and return the results of the computations.
 
         Args:
-            i1 (int): The first input value.
-            i2 (int): The second input value.
+            i1 (float): The first input value.
+            i2 (float): The second input value.
+
+        Returns:
+            tuple: The results of the computations (i1/i2, i1**i2).
 
         Raises:
-            ValueError: If the division by zero is attempted or the second input value is too large.
-            OverflowError: If the resulting power is too large.
+            ValueError: If the division by zero is attempted.
+            OverflowError: If the resulting power or division is too large.
+            TimeoutError: If the computation takes more than 1 second.
 
         Example:
-        >>> Sanitizer.validate_input(2, 3)
+        >>> Sanitizer.validate_input(2.0, 3.0)
+        (0.6666666666666666, 8.0)
         """
         if i2 == 0:
             raise ValueError("Division by zero is not allowed")
 
-        if i2 > 10000:
-            raise ValueError("Second input value too large")
-
         try:
-            i1 ** i2
+            power_result = math.pow(i1, i2)
         except OverflowError:
             raise OverflowError("Resulting power is too large")
+
+        division_result = i1 / i2
+
+        if math.isinf(division_result):
+            raise OverflowError("Resulting division is too large")
+        if math.isnan(division_result):
+            raise ValueError("Resulting division is not a number")
+
+        return division_result, power_result
+

@@ -14,13 +14,11 @@ A simple network security relay server that performs calculations and sanitizes 
 
 ## TODO
 
-- [ ] Finish the test for overflow and the `relay_server`
-- [ ] Modify the constraints on the two values computed
+- [ ] Change the tests for the `relay_server`
 
 ## Assumptions
 
 - IP addresses are considered correct only if they are in the format `x.x.x.x`, where `x` represents an integer between 0 and 255.
-- Input values for the relay server are integers and not floating-point numbers.
 
 ## Installation
 

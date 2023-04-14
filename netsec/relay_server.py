@@ -109,6 +109,7 @@ class RelayServer:
         logging.info(f"Connection accepted from {addr}")
         while True:
             client_timer = start_client_timer()
+            response_timer = Timer(self.response_timeout, handle_end_server_timeout)
             try:
                 data = client.conn.recv(1024)
                 logging.debug(f"Data received from client {addr}: {data}")
@@ -116,24 +117,18 @@ class RelayServer:
                     client.conn.sendall("Request limit reached, try again later.\r\n".encode())
                     logging.warning(f"Request limit reached for client {addr}")
                     break
-
                 client_timer.cancel()
-
                 split_data = data.decode().split(" ")
                 if len(split_data) != 4:
                     raise ValueError("Incorrect number of input arguments")
 
                 i1, i2, i3, i4 = map(str.strip, split_data)
-                i1, i2, i4 = int(i1), int(i2), int(i4)
+                i1, i2, i4 = float(i1), float(i2), int(i4)
 
-                Sanitizer.validate_ip(i3, check_specific_ips=True)
+                Sanitizer.validate_ip(i3)
                 Sanitizer.validate_port(i4)
-                Sanitizer.validate_input(i1, i2)
-
-                o1 = i1 / i2
-                o2 = i1 ** i2
-
-                response_timer = Timer(self.response_timeout, handle_end_server_timeout)
+                
+                o1, o2 = Sanitizer.validate_input(i1, i2)
                 response_timer.start()
                 self.send_data_to_end_server(o1, o2, i3, i4)
                 response = "Success\r\n"
@@ -144,6 +139,9 @@ class RelayServer:
             except OverflowError as e:
                 response = f"Overflow error: {e}\r\n"
                 logging.error(f"Overflow error from {addr}: {e}")
+            except TimeoutError as e:
+                response = f"Computation timeout error: {e}\r\n"
+                logging.error(f"Computation timeout error from {addr}: {e}")
             except Exception as e:
                 response = f"Error while processing request: {e}\r\n"
                 logging.error(f"Error while processing request from {addr}: {e}")
@@ -184,6 +182,7 @@ class RelayServer:
                 print(error_msg)
                 return
 
+            
             server_socket.listen(self.max_clients)
             self.server_socket = server_socket
             logging.info(f"Relay server started at {self.ip_address}:{self.port}")
