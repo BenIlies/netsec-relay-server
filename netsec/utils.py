@@ -1,71 +1,49 @@
-from functools import wraps
 import threading
+from functools import wraps
 
+# Define the timeout decorator
 def timeout(seconds=1):
-    """
-    A decorator that adds a timeout to a function call.
-
-    Args:
-        seconds (float): The number of seconds before the function call times out.
-
-    Returns:
-        function: The decorated function with a timeout.
-
-    Raises:
-        TimeoutError: If the function call takes longer than the specified number of seconds.
-
-    Example:
-        >>> @timeout(1.0)
-        ... def my_function():
-        ...     time.sleep(2.0)
-        ...
-        ... my_function()
-        TimeoutError: Function my_function timed out
-    """
     def decorator(func):
+        # Define the wrapper function with a thread and timer
         @wraps(func)
         def wrapper(*args, **kwargs):
+            # Define the target function for the thread
             def target():
-                """
-                A target function that calls the wrapped function and sets a flag when it completes.
-                """
-                nonlocal result, completed
-                result = func(*args, **kwargs)
-                completed = True
+                # Execute the original function and save the result
+                result_dict['result'] = func(*args, **kwargs)
+                # Mark the function as completed
+                result_dict['completed'] = True
+                # Signal the event to notify completion
+                event.set()
 
-            # Initialize variables
-            completed = False
-            result = None
-
-            # Create a timer object to trigger the timeout
-            timer = threading.Timer(seconds, lambda: None)
+            # Create a dictionary to store the function result and completion status
+            result_dict = {'result': None, 'completed': False}
+            # Create an event to signal completion
+            event = threading.Event()
+            # Create a timer to enforce the timeout
+            timer = threading.Timer(seconds, event.set)
             timer.start()
 
             try:
-                # Create a new thread to call the target function
+                # Create a thread to execute the target function
                 target_thread = threading.Thread(target=target)
                 target_thread.start()
-
-                # Wait for the target function to complete or for the timeout to trigger
-                target_thread.join(seconds)
-
+                # Wait for the event to be set, or for the timeout to expire
+                event.wait(seconds)
             except:
-                # Reraise any exceptions
+                # Raise any exception that occurred during execution
                 raise
-
             finally:
-                # Cancel the timer to prevent it from triggering
+                # Cancel the timer to prevent it from triggering after completion
                 timer.cancel()
 
-            # Check whether the target function completed successfully
-            if not completed:
-                # If not, cancel the target thread and raise a TimeoutError
-                target_thread.cancel()
+            # Check if the function completed within the timeout period
+            if not result_dict['completed']:
+                # Clear the event and raise a TimeoutError
+                event.clear()
                 raise TimeoutError(f"Function {func.__name__} timed out")
 
-            # Return the result of the target function
-            return result
-
+            # Return the function result
+            return result_dict['result']
         return wrapper
-
     return decorator
