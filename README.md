@@ -15,7 +15,6 @@ A simple network security relay server that performs calculations and sanitizes 
 ## TODO
 
 - [ ] Finish the test for overflow and the `relay_server`
-- [ ] Add support for "0.0.0.0" binding
 - [ ] Modify the constraints on the two values computed
 
 ## Assumptions

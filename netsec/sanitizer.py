@@ -2,12 +2,14 @@ from ipaddress import AddressValueError, IPv4Address
 
 class Sanitizer:
     @staticmethod
-    def validate_ip(ip):
+    def validate_ip(ip, check_specific_ips=False):
         """
         Validate the given IP address.
 
         Args:
             ip (str): The IP address to validate.
+            check_specific_ips (bool, optional): Check for specific IP addresses like multicast, reserved, or unspecified.
+                Defaults to False.
 
         Raises:
             ValueError: If the IP address is invalid, multicast, reserved, or unspecified.
@@ -17,10 +19,12 @@ class Sanitizer:
         """
         try:
             ipv4 = IPv4Address(ip)
-            if ipv4.is_multicast or ipv4.is_reserved or ipv4.is_unspecified:
+            if check_specific_ips and (ipv4.is_multicast or ipv4.is_reserved or ipv4.is_unspecified):
                 raise ValueError(f"Invalid IP address: {ip}")
         except AddressValueError as e:
             raise ValueError(f"Invalid IP address: {ip}")
+
+
 
     @staticmethod
     def validate_port(port):

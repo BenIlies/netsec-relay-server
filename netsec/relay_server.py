@@ -126,7 +126,7 @@ class RelayServer:
                 i1, i2, i3, i4 = map(str.strip, split_data)
                 i1, i2, i4 = int(i1), int(i2), int(i4)
 
-                Sanitizer.validate_ip(i3)
+                Sanitizer.validate_ip(i3, check_specific_ips=True)
                 Sanitizer.validate_port(i4)
                 Sanitizer.validate_input(i1, i2)
 
@@ -154,12 +154,15 @@ class RelayServer:
         client_timer.cancel()
         close_connection(timeout=True)
 
-    # Start the RelayServer, accept incoming connections, and process client requests
     def start(self):
         """
         Start the RelayServer.
 
         Accept incoming connections, manage connection limits, and process client requests.
+
+        Raises:
+            PermissionError: If privileged access is required to bind the address.
+            OSError: If there is an error while binding the address.
 
         Example:
         >>> relay_server.start()
@@ -168,7 +171,19 @@ class RelayServer:
         Sanitizer.validate_port(self.port)
 
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
-            server_socket.bind((self.ip_address, self.port))
+            try:
+                server_socket.bind((self.ip_address, self.port))
+            except PermissionError as e:
+                error_msg = f"Permission error, privileged access required to bind the address {self.ip_address}:{self.port}: {e}"
+                logging.error(f"Permission error, privileged access required to bind the address {self.ip_address}:{self.port}: {e}")
+                print(error_msg)
+                return
+            except OSError as e:
+                error_msg = f"Error while binding the address {self.ip_address}:{self.port}: {e}"
+                logging.error(f"Error while binding the address {self.ip_address}:{self.port}: {e}")
+                print(error_msg)
+                return
+
             server_socket.listen(self.max_clients)
             self.server_socket = server_socket
             logging.info(f"Relay server started at {self.ip_address}:{self.port}")
