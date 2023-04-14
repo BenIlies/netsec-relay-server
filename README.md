@@ -4,21 +4,11 @@ A simple network security relay server that performs calculations and sanitizes 
 
 ## Table of Contents
 
-- [TODO](#todo)
-- [Assumptions](#assumptions)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Structure](#structure)
 - [Testing](#testing)
-
-## TODO
-
-- [ ] Change the tests for the `relay_server`
-
-## Assumptions
-
-- IP addresses are considered correct only if they are in the format `x.x.x.x`, where `x` represents an integer between 0 and 255.
 
 ## Installation
 

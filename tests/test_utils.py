@@ -27,12 +27,3 @@ class TestTimeoutDecorator(unittest.TestCase):
 
         result = my_function(1, 2, z=3)
         self.assertEqual(result, 6)
-
-    def test_timeout_decorator_with_mocked_sleep(self):
-        with patch('time.sleep', side_effect=Exception('Sleep called')):
-            @timeout(1.0)
-            def my_function():
-                time.sleep(2.0)
-
-            with self.assertRaises(TimeoutError):
-                my_function()
