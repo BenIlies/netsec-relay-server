@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Timer, Lock
 from netsec.client import Client
 from netsec.sanitizer import Sanitizer
-
+from netsec.utils import timeout
 
 class RelayServer:
     """
@@ -36,7 +36,8 @@ class RelayServer:
                      f"client_timeout: {client_timeout}, response_timeout: {response_timeout}, "
                      f"requests_per_minute: {requests_per_minute}")
 
-    def send_data_to_end_server(self, o1, o2, i3, i4):
+    @timeout()
+    def send_data_to_end_server(self, o1, o2, i3, i4, timeout=None):
         """
         Send data to the end server.
 
@@ -47,12 +48,15 @@ class RelayServer:
             o2 (int): The result of I1 ** I2.
             i3 (str): The IP address of the target end server.
             i4 (int): The port number of the target end server.
+            timeout (int): The number of seconds to wait before timing out the function call. If not specified, the default timeout value is used.
 
         Raises:
             Exception: If there is an error while sending the data to the end server.
+            TimeoutError: If the computation takes more than the specified number of seconds to complete.
 
         Example:
-        >>> relay_server.send_data_to_end_server(2.5, 25, "127.0.0.1", 8081)
+        >>> timeout_value = 5
+        >>> relay_server.send_data_to_end_server(2.5, 25, "127.0.0.1", 8081, timeout=timeout_value)
         """
         logging.info(f"Sending data to end server at {i3}:{i4}: {o1} {o2} {i3} {i4}")
         try:
@@ -98,18 +102,11 @@ class RelayServer:
             timer = Timer(self.client_timeout, lambda: close_connection(timeout=True))
             timer.start()
             return timer
-        
-        # This method handles end server timeout for a client connection.
-        def handle_end_server_timeout():
-                response = "End server timeout\r\n"
-                client.conn.sendall(response.encode())
-                logging.warning(f"End server timeout for client {addr}")
 
         addr = client.addr
         logging.info(f"Connection accepted from {addr}")
         while True:
             client_timer = start_client_timer()
-            response_timer = Timer(self.response_timeout, handle_end_server_timeout)
             try:
                 data = client.conn.recv(1024)
                 logging.debug(f"Data received from client {addr}: {data}")
@@ -129,8 +126,7 @@ class RelayServer:
                 Sanitizer.validate_port(i4)
                 
                 o1, o2 = Sanitizer.validate_input(i1, i2)
-                response_timer.start()
-                self.send_data_to_end_server(o1, o2, i3, i4)
+                self.send_data_to_end_server(o1, o2, i3, i4, timeout=self.response_timeout)
                 response = "Success\r\n"
                 logging.info(f"Successfully processed request for client {addr}")
             except ValueError as e:
@@ -142,11 +138,12 @@ class RelayServer:
             except TimeoutError as e:
                 response = f"Computation timeout error: {e}\r\n"
                 logging.error(f"Computation timeout error from {addr}: {e}")
+            except BrokenPipeError:
+                logging.error(f"Broken pipe error while sending data to client {addr}: connection closed by client.")
             except Exception as e:
                 response = f"Error while processing request: {e}\r\n"
                 logging.error(f"Error while processing request from {addr}: {e}")
             finally:
-                response_timer.cancel()
                 client.conn.sendall(response.encode())
 
         client_timer.cancel()

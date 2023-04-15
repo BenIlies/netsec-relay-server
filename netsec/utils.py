@@ -7,6 +7,9 @@ def timeout(seconds=1):
         # Define the wrapper function with a thread and timer
         @wraps(func)
         def wrapper(*args, **kwargs):
+            # Get the timeout value from the keyword arguments or use the default value
+            timeout_value = kwargs.pop('timeout', seconds)
+
             # Define the target function for the thread
             def target():
                 try:
@@ -26,7 +29,7 @@ def timeout(seconds=1):
             # Create an event to signal completion
             event = threading.Event()
             # Create a timer to enforce the timeout
-            timer = threading.Timer(seconds, event.set)
+            timer = threading.Timer(timeout_value, event.set)
             timer.start()
 
             try:
@@ -34,7 +37,7 @@ def timeout(seconds=1):
                 target_thread = threading.Thread(target=target)
                 target_thread.start()
                 # Wait for the event to be set, or for the timeout to expire
-                event.wait(seconds)
+                event.wait(timeout_value)
             except:
                 # Raise any exception that occurred during execution
                 raise
