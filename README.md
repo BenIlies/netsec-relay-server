@@ -23,13 +23,19 @@ git clone https://github.com/BenIlies/netsec-relay-server.git
 To start the relay server, run the following command:
 
 ```bash
-python main.py [--config CONFIG_FILE] [--log LOG_FILE] [--verbose] [--log-level {info, warning, error}]
+python main.py [--config CONFIG_FILE] [--log LOG_FILE] [--verbose] [--log-level {info, warning, error}] [--ip-address IP_ADDRESS] [--port PORT] [--max-clients MAX_CLIENTS] [--client-timeout CLIENT_TIMEOUT] [--response-timeout RESPONSE_TIMEOUT] [--requests-per-minute REQUESTS_PER_MINUTE]
 ```
 
 - `--config CONFIG_FILE`: Path to the configuration file (default: `server.cfg`).
 - `--log LOG_FILE`: Path to the log file (default: `log.txt`).
 - `--verbose`: Print logs to the console instead of writing them to a file.
 - `--log-level {info, warning, error}`: Log level for output (default: `error`).
+- `--ip-address IP_ADDRESS`: IP address to bind to (overrides value in config file).
+- `--port PORT`: Port number to bind to (overrides value in config file).
+- `--max-clients MAX_CLIENTS`: Maximum number of clients (overrides value in config file).
+- `--client-timeout CLIENT_TIMEOUT`: Client timeout in seconds (overrides value in config file).
+- `--response-timeout RESPONSE_TIMEOUT`: Response timeout in seconds (overrides value in config file).
+- `--requests-per-minute REQUESTS_PER_MINUTE`: Maximum number of requests per minute (overrides value in config file).
 
 ## Configuration
 
