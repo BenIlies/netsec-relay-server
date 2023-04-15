@@ -1,6 +1,6 @@
 # NetSec Relay Server
 
-A simple network security relay server that performs calculations and sanitizes input, ensuring safe communication with the end server.
+A simple relay server that performs calculations and sanitizes input, ensuring safe communication with the end server.
 
 ## Table of Contents
 
