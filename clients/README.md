@@ -20,8 +20,8 @@ The following Python files are included in this folder:
 
 The following configuration files are included in this folder:
 
-- `good_client_ilies.cfg`: A configuration file containing data that a good client might send to your server.
-- `bad_client_ilies.cfg`: A configuration file containing data that a malicious user might send to try to crash your server.
+- `good_client_ilies.cfg`: A configuration file containing data that a good client might send to your server. This file is used by the `good_client_ilies.py` script by default.
+- `bad_client_ilies.cfg`: A configuration file containing data that a malicious user might send to try to crash your server. This file is used by the `bad_client_ilies.py` script by default.
 
 ## Installation
 
@@ -40,10 +40,10 @@ The scripts in this folder were developed and tested using Python 3.8.10.
 To use the `good_client_ilies.py` script, run:
 
 ```bash
-python good_client_ilies.py [IP] [PORT] [ENCRYPTED_FILE]
+python good_client_ilies.py [IP] [PORT] [--encrypted_file ENCRYPTED_FILE]
 ```
 
-Replace `[IP]` with the IP address of the server, `[PORT]` with the port number of the server, and `[ENCRYPTED_FILE]` with the path to the encrypted configuration file.
+Replace `[IP]` with the IP address of the server and `[PORT]` with the port number of the server. By default, [ENCRYPTED_FILE] is set to `good_client_ilies.cfg`. If you want to use a different encrypted configuration file, you can specify the file path as the third argument.
 
 The `good_client_ilies.py` script reads the decrypted contents of the encrypted configuration file, which contains data that a good client might send to your server. The script then creates a TCP socket, connects to the server, sends data from the configuration file to the server, line by line, and prints the server's response for each line.
 
@@ -52,10 +52,10 @@ The `good_client_ilies.py` script reads the decrypted contents of the encrypted 
 To use the `bad_client_ilies.py` script, run:
 
 ```bash
-python bad_client_ilies.py [IP] [PORT] [ENCRYPTED_FILE]
+python bad_client_ilies.py [IP] [PORT] [--encrypted_file ENCRYPTED_FILE]
 ```
 
-Replace `[IP]` with the IP address of the server, `[PORT]` with the port number of the server, and `[ENCRYPTED_FILE]` with the path to the encrypted configuration file.
+Replace `[IP]` with the IP address of the server and `[PORT]` with the port number of the server. By default, [ENCRYPTED_FILE] is set to `bad_client_ilies.cfg`. If you want to use a different encrypted configuration file, you can specify the file path as the third argument.
 
 The `bad_client_ilies.py` script reads the decrypted contents of the encrypted configuration file, which contains data that a malicious user might send to try to crash your server. The script then creates a TCP socket, connects to the server, sends the malicious input to the server, and closes the connection.
 
