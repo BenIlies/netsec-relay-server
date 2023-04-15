@@ -7,7 +7,7 @@ from netsec.relay_server import RelayServer
 def main():
     # Set up command line argument parser
     parser = argparse.ArgumentParser(description="Start Relay server.")
-    parser.add_argument("--config", dest="config_file", default="config.ini", help="path to config file")
+    parser.add_argument("--config", dest="config_file", default="server.cfg", help="path to config file")
     parser.add_argument("--log", dest="log_file", default="log.txt", help="path to log file")
     parser.add_argument("--verbose", action="store_true", help="print logs instead of writing to a file")
     parser.add_argument("--log-level", choices=["info", "warning", "error"], help="log level for output")

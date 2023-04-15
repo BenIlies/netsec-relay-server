@@ -26,14 +26,14 @@ To start the relay server, run the following command:
 python main.py [--config CONFIG_FILE] [--log LOG_FILE] [--verbose] [--log-level {info, warning, error}]
 ```
 
-- `--config CONFIG_FILE`: Path to the configuration file (default: `config.ini`).
+- `--config CONFIG_FILE`: Path to the configuration file (default: `server.cfg`).
 - `--log LOG_FILE`: Path to the log file (default: `log.txt`).
 - `--verbose`: Print logs to the console instead of writing them to a file.
 - `--log-level {info, warning, error}`: Log level for output (default: `error`).
 
 ## Configuration
 
-Configure the relay server by modifying the `config.ini` file. The available options are:
+Configure the relay server by modifying the `server.cfg` file. The available options are:
 
 ```ini
 [RelayServer]
@@ -57,12 +57,13 @@ requests_per_minute = 60
 The following files make up the project:
 
 - `main.py`: Entry point for starting the relay server.
-- `config.ini`: Configuration file for the relay server settings.
+- `server.cfg`: Configuration file for the relay server settings.
 - `netsec`:
   - `__init__.py`: Contains utility functions for setting up logging and reading the configuration file.
   - `client.py`: Defines the `Client` class for managing client connections and request limits.
   - `relayserver.py`: Defines the `RelayServer` class for managing client connections and handling requests.
   - `sanitizer.py`: Contains the `Sanitizer` class for validating and sanitizing user inputs.
+  - `utils.py`: Contains the timeout decorator for enforcing function execution timeouts.
 
 ## Testing
 
