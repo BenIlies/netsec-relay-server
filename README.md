@@ -10,6 +10,7 @@ A simple relay server that performs calculations and sanitizes input, ensuring s
 - [Configuration](#configuration)
 - [Structure](#structure)
 - [Testing](#testing)
+- [Client](#client)
 
 ## Requirements
 
@@ -84,3 +85,13 @@ NetSec Relay Server has been designed with testing in mind, and provides a suite
 ```bash
 python -m unittest discover -s tests
 ```
+
+# Client
+
+To see the client implementations, please navigate to the `clients` folder. There, you will find all the necessary information regarding the different functionalities that the clients offer.
+
+```bash
+cd clients
+```
+
+For more information on how to use the clients, please check out the README.md file dedicated specifically to this folder. This file includes detailed explanations on how to run the clients.
