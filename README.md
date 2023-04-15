@@ -88,10 +88,10 @@ python -m unittest discover -s tests
 
 # Clients
 
-To see the clients implementation, please navigate to the `clients` folder. There, you will find all the necessary scripts and configuration files to run the different clients.
+To access the client's implementation, please navigate to the `clients` folder. In there, you will find all the required scripts and configuration files.
 
 ```bash
 cd clients
 ```
 
-For more information on how to use the clients, please check out the README.md file dedicated specifically to this folder. This file includes detailed explanations on how to run the clients.
+For detailed instructions on how to use the clients, please refer to the `README.md` file in the `clients` folder. This file provides a comprehensive guide on how to execute the clients.
