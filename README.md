@@ -40,7 +40,7 @@ Configure the relay server by modifying the `server.cfg` file. The available opt
 ip_address = 127.0.0.1
 port = 44444
 max_clients = 10
-client_timeout = 10
+client_timeout = 60
 response_timeout = 10
 requests_per_minute = 60
 ```

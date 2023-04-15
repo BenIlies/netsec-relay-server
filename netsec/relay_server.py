@@ -19,7 +19,7 @@ class RelayServer:
         requests_per_minute (int): Limit on the number of requests per minute.
 
     Example:
-    >>> relay_server = RelayServer("127.0.0.1", 8080, 10, 10.0, 10.0, 60)
+    >>> relay_server = RelayServer("127.0.0.1", 8080, 10, 60.0, 10.0, 60)
     """
 
     def __init__(self, ip_address, port, max_clients, client_timeout, response_timeout, requests_per_minute):

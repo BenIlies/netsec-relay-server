@@ -21,7 +21,7 @@ def main():
     ip_address = config.get("RelayServer", "ip_address")
     port = config.getint("RelayServer", "port")
     max_clients = config.getint("RelayServer", "max_clients", fallback=10)
-    client_timeout = config.getfloat("RelayServer", "client_timeout", fallback=10.0)
+    client_timeout = config.getfloat("RelayServer", "client_timeout", fallback=60.0)
     response_timeout = config.getfloat("RelayServer", "response_timeout", fallback=10.0)
     requests_per_minute = config.getint("RelayServer", "requests_per_minute", fallback=60)
 
