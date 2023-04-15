@@ -16,6 +16,7 @@ To install the NetSec Relay Server, simply clone the repository and install any 
 
 ```bash
 git clone https://github.com/BenIlies/netsec-relay-server.git
+cd netsec-relay-server
 ```
 
 ## Usage
@@ -23,7 +24,7 @@ git clone https://github.com/BenIlies/netsec-relay-server.git
 To start the relay server, run the following command:
 
 ```bash
-python main.py [--config CONFIG_FILE] [--log LOG_FILE] [--verbose] [--log-level {info, warning, error}] [--ip-address IP_ADDRESS] [--port PORT] [--max-clients MAX_CLIENTS] [--client-timeout CLIENT_TIMEOUT] [--response-timeout RESPONSE_TIMEOUT] [--requests-per-minute REQUESTS_PER_MINUTE]
+python server-ilies.py [--config CONFIG_FILE] [--log LOG_FILE] [--verbose] [--log-level {info, warning, error}] [--ip-address IP_ADDRESS] [--port PORT] [--max-clients MAX_CLIENTS] [--client-timeout CLIENT_TIMEOUT] [--response-timeout RESPONSE_TIMEOUT] [--requests-per-minute REQUESTS_PER_MINUTE]
 ```
 
 - `--config CONFIG_FILE`: Path to the configuration file (default: `server.cfg`).
@@ -62,7 +63,7 @@ requests_per_minute = 60
 
 The following files make up the project:
 
-- `main.py`: Entry point for starting the relay server.
+- `server-ilies.py`: Entry point for starting the relay server.
 - `server.cfg`: Configuration file for the relay server settings.
 - `netsec`:
   - `__init__.py`: Contains utility functions for setting up logging and reading the configuration file.
