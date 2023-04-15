@@ -4,11 +4,16 @@ A simple relay server that performs calculations and sanitizes input, ensuring s
 
 ## Table of Contents
 
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Structure](#structure)
 - [Testing](#testing)
+
+## Requirements
+
+The NetSec Relay Server was developed and tested using Python 3.8.10 without any other specific requirements.
 
 ## Installation
 
