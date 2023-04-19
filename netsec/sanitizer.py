@@ -57,7 +57,7 @@ class Sanitizer:
             tuple: The results of the computations (i1/i2, i1**i2).
 
         Raises:
-            ValueError: If the division by zero is attempted.
+            ValueError: If the division by zero is attempted or if the base is 0 and the exponent is negative.
             OverflowError: If the resulting power or division is too large.
             TimeoutError: If the computation takes more than 1 second.
 
@@ -67,6 +67,9 @@ class Sanitizer:
         """
         if i2 == 0:
             raise ValueError("Division by zero is not allowed")
+        
+        if i1 == 0 and i2 < 0:
+            raise ValueError("0 raised to a negative power is undefined")
 
         try:
             power_result = math.pow(i1, i2)
